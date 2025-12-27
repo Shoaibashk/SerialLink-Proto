@@ -1,0 +1,33 @@
+# ===========================
+# Generated Files
+# ===========================
+gen/
+.buf/
+
+# ===========================
+# IDE / Editor
+# ===========================
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+*.sublime-project
+*.sublime-workspace
+
+# ===========================
+# OS Files
+# ===========================
+.DS_Store
+Thumbs.db
+desktop.ini
+ehthumbs.db
+
+# ===========================
+# Temporary / Build
+# ===========================
+*.tmp
+*.bak
+*.log
+*.cache
+

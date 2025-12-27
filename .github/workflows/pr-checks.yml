@@ -1,0 +1,140 @@
+# ============================================================================
+# PR Checks Pipeline (Submodule Repository)
+# ============================================================================
+# Validates proto files for repositories that consume this as a git submodule.
+# Focuses on linting, formatting, and breaking change detection.
+
+name: PR Checks
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize, reopened]
+    branches: [main]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # ──────────────────────────────────────────────────────────────────────────
+  # Validate PR Title (Conventional Commits)
+  # ──────────────────────────────────────────────────────────────────────────
+  pr-title:
+    name: 📝 PR Title
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate PR title
+        uses: amannn/action-semantic-pull-request@v5
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          types: |
+            feat
+            fix
+            docs
+            style
+            refactor
+            perf
+            test
+            build
+            ci
+            chore
+            revert
+          requireScope: false
+          subjectPattern: ^.+$
+          subjectPatternError: |
+            PR title must follow Conventional Commits format:
+            <type>: <description>
+
+            Examples:
+            - feat: add new streaming RPC
+            - fix: correct field type in PortConfig
+            - docs: update API documentation
+
+  # ──────────────────────────────────────────────────────────────────────────
+  # Lint Proto Files
+  # ──────────────────────────────────────────────────────────────────────────
+  lint:
+    name: 🔍 Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Buf
+        uses: bufbuild/buf-setup-action@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Lint proto files
+        uses: bufbuild/buf-lint-action@v1
+        with:
+          input: proto
+
+  # ──────────────────────────────────────────────────────────────────────────
+  # Check Breaking Changes
+  # ──────────────────────────────────────────────────────────────────────────
+  breaking:
+    name: 🔒 Breaking Changes
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Buf
+        uses: bufbuild/buf-setup-action@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Check for breaking changes
+        uses: bufbuild/buf-breaking-action@v1
+        with:
+          input: proto
+          against: "https://github.com/${{ github.repository }}.git#branch=${{ github.base_ref }},subdir=proto"
+
+  # ──────────────────────────────────────────────────────────────────────────
+  # Format Check
+  # ──────────────────────────────────────────────────────────────────────────
+  format:
+    name: 📐 Format
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Buf
+        uses: bufbuild/buf-setup-action@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Check formatting
+        run: |
+          buf format -d proto --exit-code || {
+            echo "::error::Proto files are not formatted. Run 'buf format -w proto' locally."
+            exit 1
+          }
+
+  # ──────────────────────────────────────────────────────────────────────────
+  # Size Check
+  # ──────────────────────────────────────────────────────────────────────────
+  size:
+    name: 📊 PR Size
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check PR size
+        uses: codelytv/pr-size-labeler@v1
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          xs_label: "size/XS"
+          xs_max_size: 10
+          s_label: "size/S"
+          s_max_size: 100
+          m_label: "size/M"
+          m_max_size: 500
+          l_label: "size/L"
+          l_max_size: 1000
+          xl_label: "size/XL"
+          fail_if_xl: false
+          files_to_ignore: |
+            "*.lock"
+            "gen/**"
