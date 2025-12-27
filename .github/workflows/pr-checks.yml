@@ -80,13 +80,26 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup Buf
         uses: bufbuild/buf-setup-action@v1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Check if proto files exist in base branch
+        id: check-base
+        run: |
+          if git ls-tree -r origin/${{ github.base_ref }} --name-only | grep -q "^proto/.*\.proto$"; then
+            echo "has_protos=true" >> $GITHUB_OUTPUT
+          else
+            echo "has_protos=false" >> $GITHUB_OUTPUT
+            echo "::notice::No proto files in base branch - skipping breaking change check"
+          fi
+
       - name: Check for breaking changes
+        if: steps.check-base.outputs.has_protos == 'true'
         uses: bufbuild/buf-breaking-action@v1
         with:
           input: proto
