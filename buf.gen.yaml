@@ -1,0 +1,22 @@
+version: v2
+managed:
+  enabled: true
+  override:
+    - file_option: go_package_prefix
+      value: github.com/Shoaibashk/SerialLink-Proto/gen/go
+plugins:
+  # Go protobuf messages
+  - remote: buf.build/protocolbuffers/go
+    out: gen/go
+    opt:
+      - paths=source_relative
+
+  # Go gRPC services
+  - remote: buf.build/grpc/go
+    out: gen/go
+    opt:
+      - paths=source_relative
+
+  # Dart protobuf (includes gRPC support)
+  - remote: buf.build/protocolbuffers/dart
+    out: gen/dart
