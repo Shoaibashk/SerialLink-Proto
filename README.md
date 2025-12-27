@@ -1,7 +1,4 @@
-<<<<<<< Updated upstream
-# SerialLink-Proto
-This is a common pattern for sharing protobuf definitions across multiple projects.
-=======
+ 
 <p align="center">
   <img src="https://raw.githubusercontent.com/Shoaibashk/SerialLink-Proto/main/.github/logo.png" alt="SerialLink Logo" width="150" />
 </p>
