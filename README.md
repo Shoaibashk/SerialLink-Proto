@@ -71,6 +71,75 @@ SerialLink-Proto/
 
 ### Prerequisites
 
+<p align="center">
+  <img src="https://raw.githubusercontent.com/Shoaibashk/SerialLink-Proto/main/.github/logo.png" alt="SerialLink Logo" width="150" />
+</p>
+
+<h1 align="center">SerialLink-Proto</h1>
+
+<p align="center">
+  <strong>Protocol Buffer definitions for SerialLink - A cross-platform serial port communication service</strong>
+</p>
+
+<p align="center">
+  <a href="https://github.com/Shoaibashk/SerialLink-Proto/actions/workflows/ci.yml">
+    <img src="https://github.com/Shoaibashk/SerialLink-Proto/actions/workflows/ci.yml/badge.svg" alt="CI Status" />
+  </a>
+  <a href="https://github.com/Shoaibashk/SerialLink-Proto/blob/main/LICENSE">
+    <img src="https://img.shields.io/github/license/Shoaibashk/SerialLink-Proto?color=blue" alt="License" />
+  </a>
+  <a href="https://buf.build">
+    <img src="https://img.shields.io/badge/built%20with-buf-blue?logo=buffer" alt="Built with Buf" />
+  </a>
+  <a href="https://github.com/Shoaibashk/SerialLink-Proto/releases">
+    <img src="https://img.shields.io/github/v/release/Shoaibashk/SerialLink-Proto?color=green" alt="Latest Release" />
+  </a>
+</p>
+
+<p align="center">
+  <a href="#-features">Features</a> •
+  <a href="#-quick-start">Quick Start</a> •
+  <a href="#-usage">Usage</a> •
+  <a href="#-api-reference">API</a> •
+  <a href="#-contributing">Contributing</a>
+</p>
+
+---
+
+## ✨ Features
+
+- 🔌 **Port Discovery** — List and inspect available serial ports with detailed metadata
+- ⚡ **Port Management** — Open, close, and configure serial connections with session management
+- 📡 **Data Transfer** — Synchronous read/write operations with timeout control
+- 🌊 **Streaming** — Real-time bidirectional data streaming with chunked transfer
+- 🩺 **Diagnostics** — Health checks, ping, and comprehensive agent information
+- 🎯 **Multi-Language** — Generate code for Go, C#, Dart/Flutter, Python, JavaScript, and more
+- 🛡️ **Type Safety** — Dedicated request/response types for each RPC following gRPC best practices
+- 📊 **Statistics** — Track bytes sent/received, errors, and connection uptime
+
+## 📁 Project Structure
+
+```
+SerialLink-Proto/
+├── 📂 proto/                    # Source protobuf definitions
+│   └── seriallink/v1/
+│       └── serial.proto         # API definitions (v1)
+├── 📂 gen/                      # Generated code (git-ignored)
+│   ├── go/                      # Generated Go code
+│   └── dart/                    # Generated Dart code
+├── 📂 docs/                     # Documentation
+│   ├── API.md                   # API reference
+│   └── ARCHITECTURE.md          # Architecture guide
+├── 📂 .github/workflows/        # CI/CD pipelines
+├── 📄 buf.yaml                  # Buf configuration
+├── 📄 buf.gen.yaml              # Code generation config
+└── 📄 generate.ps1              # Generation script (Windows)
+```
+
+## 🚀 Quick Start
+
+### Prerequisites
+
 - [**buf**](https://buf.build/docs/installation) — Protocol buffer toolchain
 
   ```powershell
@@ -331,4 +400,3 @@ This project is licensed under the **Apache License 2.0** — see the [LICENSE](
 <p align="center">
   Made with ❤️ by <a href="https://github.com/Shoaibashk">Shoaibashk</a>
 </p>
->>>>>>> Stashed changes
