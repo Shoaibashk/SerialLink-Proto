@@ -1,7 +1,5 @@
  
-<p align="center">
-  <img src="https://raw.githubusercontent.com/Shoaibashk/SerialLink-Proto/main/.github/logo.png" alt="SerialLink Logo" width="150" />
-</p>
+
 
 <h1 align="center">SerialLink-Proto</h1>
 
@@ -67,10 +65,6 @@ SerialLink-Proto/
 ## 🚀 Quick Start
 
 ### Prerequisites
-
-<p align="center">
-  <img src="https://raw.githubusercontent.com/Shoaibashk/SerialLink-Proto/main/.github/logo.png" alt="SerialLink Logo" width="150" />
-</p>
 
 <h1 align="center">SerialLink-Proto</h1>
 
