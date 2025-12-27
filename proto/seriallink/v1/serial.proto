@@ -9,29 +9,29 @@ option go_package = "github.com/Shoaibashk/SerialLink-Proto/gen/go/seriallink/v1
 service SerialService {
   // Port Discovery
   rpc ListPorts(ListPortsRequest) returns (ListPortsResponse);
-  rpc GetPortInfo(GetPortInfoRequest) returns (PortInfo);
+  rpc GetPortInfo(GetPortInfoRequest) returns (GetPortInfoResponse);
 
   // Port Management
   rpc OpenPort(OpenPortRequest) returns (OpenPortResponse);
   rpc ClosePort(ClosePortRequest) returns (ClosePortResponse);
-  rpc GetPortStatus(GetPortStatusRequest) returns (PortStatus);
+  rpc GetPortStatus(GetPortStatusRequest) returns (GetPortStatusResponse);
 
   // Data Transfer
   rpc Write(WriteRequest) returns (WriteResponse);
   rpc Read(ReadRequest) returns (ReadResponse);
 
   // Streaming
-  rpc StreamRead(StreamReadRequest) returns (stream DataChunk);
-  rpc StreamWrite(stream DataChunk) returns (StreamWriteResponse);
-  rpc BiDirectionalStream(stream DataChunk) returns (stream DataChunk);
+  rpc StreamRead(StreamReadRequest) returns (stream StreamReadResponse);
+  rpc StreamWrite(stream StreamWriteRequest) returns (StreamWriteResponse);
+  rpc BiDirectionalStream(stream BiDirectionalStreamRequest) returns (stream BiDirectionalStreamResponse);
 
   // Port Configuration
   rpc ConfigurePort(ConfigurePortRequest) returns (ConfigurePortResponse);
-  rpc GetPortConfig(GetPortConfigRequest) returns (PortConfig);
+  rpc GetPortConfig(GetPortConfigRequest) returns (GetPortConfigResponse);
 
   // Health & Diagnostics
   rpc Ping(PingRequest) returns (PingResponse);
-  rpc GetAgentInfo(GetAgentInfoRequest) returns (AgentInfo);
+  rpc GetAgentInfo(GetAgentInfoRequest) returns (GetAgentInfoResponse);
 }
 
 // ============================================================================
@@ -61,6 +61,10 @@ message PortInfo {
   PortType port_type = 7; // Type of port
   bool is_open = 8; // Whether port is currently open
   string locked_by = 9; // Client ID if locked
+}
+
+message GetPortInfoResponse {
+  PortInfo port = 1;
 }
 
 enum PortType {
@@ -118,6 +122,10 @@ message PortStatistics {
   uint64 errors = 3;
   int64 opened_at = 4; // Unix timestamp
   int64 last_activity = 5; // Unix timestamp
+}
+
+message GetPortStatusResponse {
+  PortStatus status = 1;
 }
 
 // ============================================================================
@@ -180,6 +188,10 @@ message GetPortConfigRequest {
   string port_name = 1;
 }
 
+message GetPortConfigResponse {
+  PortConfig config = 1;
+}
+
 // ============================================================================
 // Data Transfer Messages
 // ============================================================================
@@ -219,7 +231,7 @@ message StreamReadRequest {
   string port_name = 1;
   string session_id = 2;
   uint32 chunk_size = 3; // Preferred chunk size
-  bool include_timestamps = 4; // Include timestamps in chunks
+  bool include_timestamps = 4; // Include timestamp in each chunk
 }
 
 message DataChunk {
@@ -227,6 +239,22 @@ message DataChunk {
   bytes data = 2;
   int64 timestamp = 3; // Unix timestamp in nanoseconds
   uint32 sequence = 4; // Sequence number for ordering
+}
+
+message StreamReadResponse {
+  DataChunk chunk = 1;
+}
+
+message StreamWriteRequest {
+  DataChunk chunk = 1;
+}
+
+message BiDirectionalStreamRequest {
+  DataChunk chunk = 1;
+}
+
+message BiDirectionalStreamResponse {
+  DataChunk chunk = 1;
 }
 
 message StreamWriteResponse {
@@ -266,4 +294,8 @@ message AgentConfig {
   string grpc_address = 1;
   bool tls_enabled = 2;
   uint32 max_connections = 3;
+}
+
+message GetAgentInfoResponse {
+  AgentInfo info = 1;
 }

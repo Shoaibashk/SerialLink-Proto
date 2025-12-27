@@ -81,10 +81,10 @@ rpc ListPorts(ListPortsRequest) returns (ListPortsResponse)
     {
       "name": "COM3",
       "description": "Arduino Uno (COM3)",
-      "hardwareId": "USB\\VID_2341&PID_0043",
+      "hardware_id": "USB\\VID_2341&PID_0043",
       "product": "Arduino Uno (COM3)",
-      "serialNumber": "95632313234351211231",
-      "portType": "PORT_TYPE_USB"
+      "serial_number": "95632313234351211231",
+      "port_type": "PORT_TYPE_USB"
     }
   ]
 }
@@ -97,7 +97,7 @@ rpc ListPorts(ListPortsRequest) returns (ListPortsResponse)
 Get detailed information about a specific port.
 
 ```protobuf
-rpc GetPortInfo(GetPortInfoRequest) returns (PortInfo)
+rpc GetPortInfo(GetPortInfoRequest) returns (GetPortInfoResponse)
 ```
 
 **Request:**
@@ -105,6 +105,19 @@ rpc GetPortInfo(GetPortInfoRequest) returns (PortInfo)
 ```json
 {
   "port_name": "COM1"
+}
+```
+
+**Response:**
+
+```json
+{
+  "port": {
+    "name": "COM1",
+    "description": "Communications Port",
+    "port_type": "PORT_TYPE_NATIVE",
+    "is_open": false
+  }
 }
 ```
 
@@ -141,11 +154,11 @@ rpc OpenPort(OpenPortRequest) returns (OpenPortResponse)
 {
   "success": true,
   "message": "port opened successfully",
-  "sessionId": "24189592-1c7f-4147-8679-87bf033c2bca"
+  "session_id": "24189592-1c7f-4147-8679-87bf033c2bca"
 }
 ```
 
-> ⚠️ Save the `sessionId` — you'll need it for subsequent operations.
+> ⚠️ Save the `session_id` — you'll need it for subsequent operations.
 
 ---
 
@@ -173,29 +186,31 @@ rpc ClosePort(ClosePortRequest) returns (ClosePortResponse)
 Query current port state and statistics.
 
 ```protobuf
-rpc GetPortStatus(GetPortStatusRequest) returns (PortStatus)
+rpc GetPortStatus(GetPortStatusRequest) returns (GetPortStatusResponse)
 ```
 
 **Response:**
 
 ```json
 {
-  "portName": "COM3",
-  "isOpen": true,
-  "lockedBy": "default-client",
-  "sessionId": "24189592-1c7f-4147-8679-87bf033c2bca",
-  "currentConfig": {
-    "baudRate": 115200,
-    "dataBits": "DATA_BITS_8",
-    "stopBits": "STOP_BITS_1",
-    "parity": "PARITY_NONE",
-    "flowControl": "FLOW_CONTROL_NONE"
-  },
-  "statistics": {
-    "bytesSent": "14",
-    "bytesReceived": "565",
-    "openedAt": "1766343135",
-    "lastActivity": "1766343150"
+  "status": {
+    "port_name": "COM3",
+    "is_open": true,
+    "locked_by": "default-client",
+    "session_id": "24189592-1c7f-4147-8679-87bf033c2bca",
+    "current_config": {
+      "baud_rate": 115200,
+      "data_bits": "DATA_BITS_8",
+      "stop_bits": "STOP_BITS_1",
+      "parity": "PARITY_NONE",
+      "flow_control": "FLOW_CONTROL_NONE"
+    },
+    "statistics": {
+      "bytes_sent": "14",
+      "bytes_received": "565",
+      "opened_at": "1766343135",
+      "last_activity": "1766343150"
+    }
   }
 }
 ```
@@ -216,7 +231,13 @@ rpc ConfigurePort(ConfigurePortRequest) returns (ConfigurePortResponse)
 {
   "port_name": "COM1",
   "session_id": "...",
-  "baud_rate": 115200
+  "config": {
+    "baud_rate": 115200,
+    "data_bits": 8,
+    "stop_bits": 1,
+    "parity": 1,
+    "flow_control": 1
+  }
 }
 ```
 
@@ -248,7 +269,7 @@ rpc Write(WriteRequest) returns (WriteResponse)
 ```json
 {
   "success": true,
-  "bytesWritten": 14,
+  "bytes_written": 14,
   "message": "data written successfully"
 }
 ```
@@ -280,7 +301,7 @@ rpc Read(ReadRequest) returns (ReadResponse)
 {
   "success": true,
   "data": "MC4wMCA0LjI0DQowLjAwIDMuMzkNCjAuMDAgMi43Mg0KMC4wMCAyLjE3DQowLjAwIDEuNzQNCjAuMDAgMS4zOQ0KMC4wMCAxLjExDQowLjAwIDAuODkNCjAuMDAgMC43MQ0K...",
-  "bytesRead": 565,
+  "bytes_read": 565,
   "message": "data read successfully"
 }
 ```
@@ -294,7 +315,7 @@ rpc Read(ReadRequest) returns (ReadResponse)
 Server-side streaming of incoming data.
 
 ```protobuf
-rpc StreamRead(StreamReadRequest) returns (stream ReadResponse)
+rpc StreamRead(StreamReadRequest) returns (stream StreamReadResponse)
 ```
 
 Continuous stream of data as it arrives on the port.
@@ -306,7 +327,7 @@ Continuous stream of data as it arrives on the port.
 Client-side streaming for batch writes.
 
 ```protobuf
-rpc StreamWrite(stream WriteRequest) returns (StreamWriteResponse)
+rpc StreamWrite(stream StreamWriteRequest) returns (StreamWriteResponse)
 ```
 
 Send multiple data chunks efficiently.
@@ -318,7 +339,7 @@ Send multiple data chunks efficiently.
 Full-duplex communication.
 
 ```protobuf
-rpc BiDirectionalStream(stream WriteRequest) returns (stream ReadResponse)
+rpc BiDirectionalStream(stream BiDirectionalStreamRequest) returns (stream BiDirectionalStreamResponse)
 ```
 
 Simultaneously send and receive data.
@@ -351,19 +372,27 @@ rpc Ping(PingRequest) returns (PingResponse)
 Get service version and status.
 
 ```protobuf
-rpc GetAgentInfo(AgentInfoRequest) returns (AgentInfo)
+rpc GetAgentInfo(GetAgentInfoRequest) returns (GetAgentInfoResponse)
 ```
 
 **Response:**
 
 ```json
 {
-  "version": "1.0.0",
-  "commit": "abc1234",
-  "build_date": "2025-12-21",
-  "uptime_seconds": 3600,
-  "open_ports": 2,
-  "features": ["tls", "streaming", "reflection"]
+  "info": {
+    "version": "1.0.0",
+    "build_commit": "abc1234",
+    "build_date": "2025-12-21",
+    "os": "windows",
+    "arch": "amd64",
+    "uptime_seconds": 3600,
+    "supported_features": ["tls", "streaming", "reflection"],
+    "config": {
+      "grpc_address": "localhost:50051",
+      "tls_enabled": false,
+      "max_connections": 100
+    }
+  }
 }
 ```
 
@@ -396,7 +425,13 @@ for port in ports.ports:
 # Open port
 response = stub.OpenPort(OpenPortRequest(
     port_name="COM1",
-    baud_rate=9600
+    config=PortConfig(
+        baud_rate=9600,
+        data_bits=DataBits.DATA_BITS_8,
+        stop_bits=StopBits.STOP_BITS_1,
+        parity=Parity.PARITY_NONE,
+        flow_control=FlowControl.FLOW_CONTROL_NONE
+    )
 ))
 session_id = response.session_id
 
@@ -450,7 +485,13 @@ client.ListPorts({}, (err, response) => {
 // Open port
 client.OpenPort({
   port_name: 'COM1',
-  baud_rate: 9600
+  config: {
+    baud_rate: 9600,
+    data_bits: 8,
+    stop_bits: 1,
+    parity: 1,
+    flow_control: 1
+  }
 }, (err, response) => {
   const sessionId = response.session_id;
   
@@ -506,7 +547,13 @@ func main() {
     // Open port
     resp, err := client.OpenPort(context.Background(), &pb.OpenPortRequest{
         PortName: "COM1",
-        BaudRate: 9600,
+        Config: &pb.PortConfig{
+            BaudRate:    9600,
+            DataBits:    pb.DataBits_DATA_BITS_8,
+            StopBits:    pb.StopBits_STOP_BITS_1,
+            Parity:      pb.Parity_PARITY_NONE,
+            FlowControl: pb.FlowControl_FLOW_CONTROL_NONE,
+        },
     })
     if err != nil {
         log.Fatal(err)
@@ -539,7 +586,14 @@ foreach (var port in ports.Ports)
 var openResponse = await client.OpenPortAsync(new OpenPortRequest
 {
     PortName = "COM1",
-    BaudRate = 9600
+    Config = new PortConfig
+    {
+        BaudRate = 9600,
+        DataBits = DataBits.DataBits8,
+        StopBits = StopBits.StopBits1,
+        Parity = Parity.ParityNone,
+        FlowControl = FlowControl.FlowControlNone
+    }
 });
 
 var sessionId = openResponse.SessionId;
