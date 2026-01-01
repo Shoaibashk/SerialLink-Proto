@@ -104,6 +104,12 @@ Write-Host "╚═════════════════════�
 $projectRoot = $PSScriptRoot
 Set-Location $projectRoot
 
+# Add Dart pub cache to PATH for protoc-gen-dart
+$pubCacheBin = Join-Path $env:LOCALAPPDATA "Pub\Cache\bin"
+if (Test-Path $pubCacheBin) {
+    $env:PATH = "$pubCacheBin;$env:PATH"
+}
+
 # Check buf installation
 Write-Step "Checking prerequisites"
 try {
@@ -195,12 +201,14 @@ plugins:
         }
     }
     elseif ($Target -eq 'dart') {
-        # Dart-only generation
+        # Dart-only generation using main buf.gen.yaml (includes local protoc-gen-dart)
         $dartTemplate = @"
 version: v2
 plugins:
-  - remote: buf.build/protocolbuffers/dart
+  - local: protoc-gen-dart
     out: gen/dart
+    opt:
+      - grpc
 "@
         $tempFile = Join-Path $env:TEMP "buf-gen-dart-$(New-Guid).yaml"
         $dartTemplate | Out-File -FilePath $tempFile -Encoding UTF8 -NoNewline

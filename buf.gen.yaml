@@ -17,6 +17,8 @@ plugins:
     opt:
       - paths=source_relative
 
-  # Dart protobuf (includes gRPC support)
-  - remote: buf.build/protocolbuffers/dart
+  # Dart protobuf messages and gRPC client stubs
+  - local: protoc-gen-dart
     out: gen/dart
+    opt:
+      - grpc
