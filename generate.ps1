@@ -55,11 +55,11 @@ $InitialDelaySeconds = 30
 if ($Target -eq 'flutter') { $Target = 'dart' }
 
 #region Helper Functions
-function Write-Step { param([string]$Message) Write-Host "`n▸ $Message" -ForegroundColor Cyan }
-function Write-Success { param([string]$Message) Write-Host "  ✓ $Message" -ForegroundColor Green }
-function Write-Failure { param([string]$Message) Write-Host "  ✗ $Message" -ForegroundColor Red }
+function Write-Step { param([string]$Message) Write-Host "`n>> $Message" -ForegroundColor Cyan }
+function Write-Success { param([string]$Message) Write-Host "  [OK] $Message" -ForegroundColor Green }
+function Write-Failure { param([string]$Message) Write-Host "  [FAIL] $Message" -ForegroundColor Red }
 function Write-Info { param([string]$Message) Write-Host "  $Message" -ForegroundColor Gray }
-function Write-Warning { param([string]$Message) Write-Host "  ⚠ $Message" -ForegroundColor Yellow }
+function Write-Warning { param([string]$Message) Write-Host "  [WARN] $Message" -ForegroundColor Yellow }
 
 function Invoke-BufGenerate {
     param(
@@ -97,9 +97,9 @@ function Invoke-BufGenerate {
 
 #region Main Script
 Write-Host ""
-Write-Host "╔═══════════════════════════════════════════════════╗" -ForegroundColor Magenta
-Write-Host "║         SerialLink-Proto Code Generator           ║" -ForegroundColor Magenta
-Write-Host "╚═══════════════════════════════════════════════════╝" -ForegroundColor Magenta
+Write-Host "=====================================================" -ForegroundColor Magenta
+Write-Host " SerialLink-Proto Code Generator" -ForegroundColor Magenta
+Write-Host "=====================================================" -ForegroundColor Magenta
 
 $projectRoot = $PSScriptRoot
 Set-Location $projectRoot
@@ -168,8 +168,8 @@ try {
         $result = Invoke-BufGenerate
         if ($result.Success) {
             $generateSuccess = $true
-            Write-Success "Generated Go code → gen/go/"
-            Write-Success "Generated Dart code → gen/dart/"
+            Write-Success "Generated Go code -> gen/go/"
+            Write-Success "Generated Dart code -> gen/dart/"
         } else {
             throw $result.Output
         }
@@ -192,7 +192,7 @@ plugins:
             $result = Invoke-BufGenerate -TemplateFile $tempFile
             if ($result.Success) {
                 $generateSuccess = $true
-                Write-Success "Generated Go code → gen/go/"
+                Write-Success "Generated Go code -> gen/go/"
             } else {
                 throw $result.Output
             }
@@ -216,7 +216,7 @@ plugins:
             $result = Invoke-BufGenerate -TemplateFile $tempFile
             if ($result.Success) {
                 $generateSuccess = $true
-                Write-Success "Generated Dart code → gen/dart/"
+                Write-Success "Generated Dart code -> gen/dart/"
             } else {
                 throw $result.Output
             }
@@ -232,9 +232,9 @@ plugins:
 
 # Summary
 Write-Host ""
-Write-Host "╔═══════════════════════════════════════════════════╗" -ForegroundColor Green
-Write-Host "║              Generation Complete! 🎉              ║" -ForegroundColor Green
-Write-Host "╚═══════════════════════════════════════════════════╝" -ForegroundColor Green
+Write-Host "=====================================================" -ForegroundColor Green
+Write-Host " Generation Complete!" -ForegroundColor Green
+Write-Host "=====================================================" -ForegroundColor Green
 Write-Host ""
 
 # Show generated files
@@ -242,7 +242,7 @@ if (Test-Path "gen") {
     Write-Host "Generated files:" -ForegroundColor White
     Get-ChildItem -Path "gen" -Recurse -File | ForEach-Object {
         $relativePath = $_.FullName.Replace("$projectRoot\", "")
-        Write-Host "  📄 $relativePath" -ForegroundColor Gray
+        Write-Host "  - $relativePath" -ForegroundColor Gray
     }
 }
 Write-Host ""
