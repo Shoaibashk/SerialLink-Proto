@@ -1,37 +1,32 @@
-<p align="center">
-  <img src="https://raw.githubusercontent.com/Shoaibashk/SerialLink-Proto/main/.github/logo.png" alt="SerialLink Logo" width="150" />
-</p>
+# SerialLink-Proto
 
-<h1 align="center">SerialLink-Proto</h1>
+![SerialLink Logo](https://raw.githubusercontent.com/Shoaibashk/SerialLink-Proto/main/.github/logo.png)
 
-<p align="center">
-  <strong>Protocol Buffer definitions for SerialLink - A cross-platform serial port communication service</strong>
-</p>
+**Protocol Buffer definitions for SerialLink — a cross-platform
+serial port communication service**
 
-<p align="center">
-  <a href="https://github.com/Shoaibashk/SerialLink-Proto/actions/workflows/ci.yml">
-    <img src="https://github.com/Shoaibashk/SerialLink-Proto/actions/workflows/ci.yml/badge.svg" alt="CI Status" />
-  </a>
-  <a href="https://github.com/Shoaibashk/SerialLink-Proto/blob/main/LICENSE">
-    <img src="https://img.shields.io/github/license/Shoaibashk/SerialLink-Proto?color=blue" alt="License" />
-  </a>
-  <a href="https://buf.build">
-    <img src="https://img.shields.io/badge/built%20with-buf-blue?logo=buffer" alt="Built with Buf" />
-  </a>
-  <a href="https://github.com/Shoaibashk/SerialLink-Proto/releases">
-    <img src="https://img.shields.io/github/v/release/Shoaibashk/SerialLink-Proto?color=green" alt="Latest Release" />
-  </a>
-</p>
+[![CI Status](https://github.com/Shoaibashk/SerialLink-Proto/actions/workflows/ci.yml/badge.svg)](https://github.com/Shoaibashk/SerialLink-Proto/actions/workflows/ci.yml)
+[![License](https://img.shields.io/github/license/Shoaibashk/SerialLink-Proto?color=blue)](https://github.com/Shoaibashk/SerialLink-Proto/blob/main/LICENSE)
+[![Built with Buf](https://img.shields.io/badge/built%20with-buf-blue?logo=buffer)](https://buf.build)
+[![Latest Release](https://img.shields.io/github/v/release/Shoaibashk/SerialLink-Proto?color=green)](https://github.com/Shoaibashk/SerialLink-Proto/releases)
 
-<p align="center">
-  <a href="#-features">Features</a> •
-  <a href="#-quick-start">Quick Start</a> •
-  <a href="#-usage">Usage</a> •
-  <a href="#-api-reference">API</a> •
-  <a href="#-contributing">Contributing</a>
-</p>
+[Features](#-features) • [Quick Start](#-quick-start) • [Submodule](#-use-as-git-submodule)
+[Usage](#-usage) • [API](#-api-reference) • [Contributing](#-contributing)
 
 ---
+
+## 📋 Overview
+
+SerialLink-Proto is the **single source of truth** for Protocol Buffer
+definitions in the SerialLink ecosystem. It provides:
+
+- **Proto definitions** — Canonical API contracts in `proto/`
+- **Pre-generated code** — Ready-to-use Go and Dart code in `gen/`
+- **Multi-project support** — Use as a Git submodule in your projects
+
+> **Note:** The `gen/` folder contains pre-generated code that is
+committed to this repository, so projects can consume generated files
+without running code generation.
 
 ## ✨ Features
 
@@ -40,34 +35,39 @@
 - 📡 **Data Transfer** — Synchronous read/write operations
 - 🌊 **Streaming** — Real-time bidirectional data streaming
 - 🩺 **Diagnostics** — Health checks and agent information
-- 🎯 **Multi-Language** — Generate code for Go, Dart/Flutter, and more
+- 🎯 **Multi-Language** — Pre-generated code for Go and Dart/Flutter
 
 ## 📁 Project Structure
 
-```
+```text
 SerialLink-Proto/
 ├── 📂 proto/                    # Source protobuf definitions
 │   └── seriallink/v1/
 │       └── serial.proto         # API definitions (v1)
-├── 📂 gen/                      # Generated code (git-ignored)
-│   ├── go/                      # Generated Go code
-│   └── dart/                    # Generated Dart code
+├── 📂 gen/                      # Pre-generated code (committed)
+│   ├── go/                      # Go: serial.pb.go, serial_grpc.pb.go
+│   └── dart/                    # Dart: serial.pb.dart, serial.pbgrpc.dart, ...
 ├── 📂 docs/                     # Documentation
-│   ├── API.md                   # API reference
-│   └── ARCHITECTURE.md          # Architecture guide
-├── 📂 .github/workflows/        # CI/CD pipelines
-├── 📄 buf.yaml                  # Buf configuration
-├── 📄 buf.gen.yaml              # Code generation config
-└── 📄 generate.ps1              # Generation script (Windows)
+│   ├── API.md                   # Full API reference
+│   └── ARCHITECTURE.md          # Architecture & design guide
+├── 📄 buf.yaml                  # Buf module configuration
+├── 📄 buf.gen.yaml              # Code generation configuration
+├── 📄 generate.ps1              # Generation script (Windows/PowerShell)
+├── 📄 CONTRIBUTING.md           # Contribution guidelines
+└── 📄 LICENSE                   # Apache 2.0 License
 ```
+
+---
 
 ## 🚀 Quick Start
 
 ### Prerequisites
 
-- [**buf**](https://buf.build/docs/installation) — Protocol buffer toolchain
+- [**buf**](https://buf.build/docs/installation) — Protocol buffer
+toolchain (only needed for regenerating code)
 
-  ```powershell
+<!-- markdownlint-disable MD013 -->
+```powershell
   # Windows (Scoop)
   scoop install buf
 
@@ -78,10 +78,16 @@ SerialLink-Proto/
   brew install bufbuild/buf/buf
 
   # Linux
-  curl -sSL "https://github.com/bufbuild/buf/releases/latest/download/buf-Linux-x86_64" -o /usr/local/bin/buf && chmod +x /usr/local/bin/buf
-  ```
+  $bufUrl = "https://github.com/" +
+    "bufbuild/" +
+    "buf/releases/latest/" +
+    "download/buf-Linux-x86_64"
+  curl -sSL $bufUrl -o /usr/local/bin/buf && chmod +x /usr/local/bin/buf
+```
+<!-- markdownlint-enable MD013 -->
+<!-- markdownlint-enable MD013 -->
 
-### Generate Code
+### Clone & Generate
 
 ```powershell
 # Clone the repository
@@ -104,18 +110,69 @@ cd SerialLink-Proto
 
 ### Generated Output
 
-After running code generation:
+- **Go** — `gen/go/seriallink/v1/` — `serial.pb.go`, `serial_grpc.pb.go`
+- **Dart** — `gen/dart/seriallink/v1/` —
+  `serial.pb.dart`, `serial.pbenum.dart`,
+  `serial.pbgrpc.dart`, `serial.pbjson.dart`
 
-| Language | Location | Files |
-|----------|----------|-------|
-| **Go** | `gen/go/seriallink/v1/` | `serial.pb.go`, `serial_grpc.pb.go` |
-| **Dart** | `gen/dart/seriallink/v1/` | `serial.pb.dart`, `serial.pbenum.dart`, `serial.pbgrpc.dart` |
+---
+
+## 📦 Use as Git Submodule
+
+This repository is designed to be used as a **Git submodule** in other
+projects. The pre-generated code in `gen/` can be used directly without any
+additional setup.
+
+### Adding to Your Project
+
+```bash
+# Add as a submodule
+git submodule add https://github.com/Shoaibashk/SerialLink-Proto.git proto
+
+# Initialize submodules (for cloned projects)
+git submodule update --init --recursive
+```
+
+### Go Projects
+
+```go
+import pb "path/to/proto/gen/go/seriallink/v1"
+
+// Use the generated client
+client := pb.NewSerialServiceClient(conn)
+```
+
+### Dart/Flutter Projects
+
+Reference the generated files directly or copy them to your project:
+
+```dart
+import 'package:your_app/proto/gen/dart/seriallink/v1/serial.pbgrpc.dart';
+```
+
+### Updating the Submodule
+
+```bash
+# Pull latest changes
+cd proto
+git pull origin main
+cd ..
+
+# Commit the submodule update
+git add proto
+git commit -m "chore: update SerialLink-Proto submodule"
+```
+
+---
 
 ## 💻 Usage
 
 ### Go
 
+<!-- markdownlint-disable MD013 -->
 ```go
+package main
+
 import (
     "context"
     "log"
@@ -127,7 +184,8 @@ import (
 
 func main() {
     // Connect to SerialLink server
-    conn, err := grpc.Dial("localhost:50051", grpc.WithTransportCredentials(insecure.NewCredentials()))
+    conn, err := grpc.NewClient("localhost:50051", 
+        grpc.WithTransportCredentials(insecure.NewCredentials()))
     if err != nil {
         log.Fatal(err)
     }
@@ -146,6 +204,7 @@ func main() {
     }
 }
 ```
+<!-- markdownlint-enable MD013 -->
 
 ### Dart/Flutter
 
@@ -178,7 +237,7 @@ void main() async {
 }
 ```
 
-Add to your `pubspec.yaml`:
+**pubspec.yaml:**
 
 ```yaml
 dependencies:
@@ -186,28 +245,37 @@ dependencies:
   protobuf: ^3.1.0
 ```
 
+---
+
 ## 📖 API Reference
 
 ### Service Methods
 
-| Category | Method | Description |
-|----------|--------|-------------|
-| **Discovery** | `ListPorts` | Enumerate available serial ports |
-| | `GetPortInfo` | Get detailed port information |
-| **Management** | `OpenPort` | Open and configure a port |
-| | `ClosePort` | Close an open port |
-| | `GetPortStatus` | Get port status and statistics |
-| **Data** | `Write` | Write data to port |
-| | `Read` | Read data from port |
-| **Streaming** | `StreamRead` | Stream data from port |
-| | `StreamWrite` | Stream data to port |
-| | `BiDirectionalStream` | Full duplex streaming |
-| **Config** | `ConfigurePort` | Update port configuration |
-| | `GetPortConfig` | Get current configuration |
-| **Health** | `Ping` | Health check |
-| | `GetAgentInfo` | Agent version and info |
+- **Discovery**
+  - `ListPorts` — Enumerate available serial ports
+  - `GetPortInfo` — Get detailed port information
+- **Management**
+  - `OpenPort` — Open and configure a port
+  - `ClosePort` — Close an open port
+  - `GetPortStatus` — Get port status and statistics
+- **Data**
+  - `Write` — Write data to port
+  - `Read` — Read data from port
+- **Streaming**
+  - `StreamRead` — Stream data from port
+  - `StreamWrite` — Stream data to port
+  - `BiDirectionalStream` — Full duplex streaming
+- **Config**
+  - `ConfigurePort` — Update port configuration
+  - `GetPortConfig` — Get current configuration
+- **Health**
+  - `Ping` — Health check
+  - `GetAgentInfo` — Agent version and info
 
-📚 **[Full API Documentation →](docs/API.md)**
+📚 **[Full API Documentation →](docs/API.md)**  
+🏗️ **[Architecture Guide →](docs/ARCHITECTURE.md)**
+
+---
 
 ## 🔧 Buf Commands
 
@@ -225,76 +293,76 @@ buf format -w proto
 buf generate proto
 ```
 
+---
+
 ## 🤝 Contributing
 
-We welcome contributions! Here's how you can help:
+We welcome contributions from the community! Whether it's bug fixes,
+new features, or documentation improvements.
 
-### Development Setup
+### Quick Start for Contributors
 
 1. **Fork** the repository
-2. **Clone** your fork:
+1. **Clone** your fork:
+
+<!-- markdownlint-disable MD013 -->
    ```powershell
-   git clone https://github.com/YOUR_USERNAME/SerialLink-Proto.git
+   $repo = "https://github.com/" +
+     "YOUR_USERNAME/SerialLink-Proto.git"
+   git clone $repo
+   cd SerialLink-Proto
    ```
-3. **Create** a feature branch:
+<!-- markdownlint-enable MD013 -->
+
+1. **Create** a feature branch:
+
    ```powershell
-   git checkout -b feat/amazing-feature
+   git checkout -b feat/your-feature-name
    ```
 
-### Making Changes
+1. **Make changes** to files in `proto/seriallink/v1/`
+1. **Validate** your changes:
 
-1. **Edit** proto files in `proto/seriallink/v1/`
-2. **Lint** your changes:
    ```powershell
    buf lint proto
-   ```
-3. **Format** your changes:
-   ```powershell
    buf format -w proto
-   ```
-4. **Test** generation:
-   ```powershell
    .\generate.ps1 -Clean -Lint
    ```
 
-### Commit Guidelines
+1. **Commit** — use [Conventional Commits](https://www.conventionalcommits.org/).
 
-We use [Conventional Commits](https://www.conventionalcommits.org/):
-
-```
-feat: add new streaming RPC method
-fix: correct field type in PortConfig
-docs: update API documentation
-refactor: reorganize message definitions
-```
-
-### Pull Request
-
-1. **Push** your changes:
-   ```powershell
-   git push origin feat/amazing-feature
+   ```text
+   feat: add new streaming RPC method
+   fix: correct field type in PortConfig
+   docs: update API documentation
    ```
-2. **Open** a Pull Request
-3. **Wait** for CI checks to pass
-4. **Address** review feedback
+
+1. **Push** and create a Pull Request
 
 ### Proto Style Guide
 
-- Use `PascalCase` for message and enum names
-- Use `snake_case` for field names
-- Add comments for all public APIs
-- Keep backward compatibility in mind
+- **Message names** — `PascalCase` → `PortConfig`
+- **Field names** — `snake_case` → `port_name`
+- **Enum values** — `UPPER_SNAKE_CASE` → `PORT_TYPE_USB`
+- **Comments** — Document all public APIs
+
+📖 **[Full Contributing Guide →](CONTRIBUTING.md)**
+
+---
 
 ## 📄 License
 
-This project is licensed under the **Apache License 2.0** — see the [LICENSE](LICENSE) file for details.
+This project is licensed under the **Apache License 2.0**.
+See [LICENSE](LICENSE).
+
+---
 
 ## 🔗 Related Projects
 
-| Project | Description |
-|---------|-------------|
-| [SerialLink](https://github.com/Shoaibashk/SerialLink) | Main server implementation (Go) |
-| [SerialLink-Flutter](https://github.com/Shoaibashk/SerialLink-Flutter) | Flutter client application |
+- [SerialLink](https://github.com/Shoaibashk/SerialLink) — Main server
+  implementation (Go)
+- [SerialLink-Flutter](https://github.com/Shoaibashk/SerialLink-Flutter) —
+  Flutter client application
 
 ## 📚 Resources
 
@@ -304,6 +372,4 @@ This project is licensed under the **Apache License 2.0** — see the [LICENSE](
 
 ---
 
-<p align="center">
-  Made with ❤️ by <a href="https://github.com/Shoaibashk">Shoaibashk</a>
-</p>
+Made with ❤️ by [Shoaibashk](https://github.com/Shoaibashk)

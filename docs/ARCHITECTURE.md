@@ -1,14 +1,17 @@
 # Architecture Guide
 
-This document describes the architecture and design principles of the SerialLink-Proto repository.
+This document describes the architecture and design principles of the
+SerialLink-Proto repository.
 
 ## 📐 Design Principles
 
 ### 1. Single Source of Truth
 
-All protocol buffer definitions live in the `proto/` directory. This is the canonical source for all API contracts across the SerialLink ecosystem.
+All protocol buffer definitions live in the `proto/` directory. This is
+the canonical source for all API contracts across the SerialLink
+ecosystem.
 
-```
+```text
 proto/
 └── seriallink/v1/
     └── serial.proto    ← Single source for all definitions
@@ -16,7 +19,8 @@ proto/
 
 ### 2. Generated Code Isolation
 
-Generated code is placed in `gen/` and is **excluded from version control**. This ensures:
+Generated code is placed in `gen/` and is **excluded from version
+control**. This ensures:
 
 - No merge conflicts on generated files
 - Fresh generation on each build
@@ -33,7 +37,7 @@ API versions are embedded in the package path (`seriallink/v1/`), enabling:
 
 ## 📁 Folder Structure
 
-```
+```text
 SerialLink-Proto/
 ├── proto/                          # 📦 Source Definitions
 │   └── seriallink/
@@ -107,7 +111,7 @@ plugins:
 
 ## 🔄 Generation Workflow
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────┐
 │                     proto/seriallink/v1/                    │
 │                        serial.proto                         │
@@ -159,14 +163,12 @@ plugins:
 
 ## 🎯 Best Practices Applied
 
-| Practice | Implementation |
-|----------|----------------|
-| Version in path | `seriallink/v1/` |
-| Generated code isolation | `gen/` (git-ignored) |
-| Reproducible builds | `buf.lock` for plugins |
-| Lint enforcement | STANDARD lint rules |
-| Breaking detection | FILE-level breaking checks |
-| CI validation | GitHub Actions workflows |
+- **Version in path** — `seriallink/v1/`
+- **Generated code isolation** — `gen/` (git-ignored)
+- **Reproducible builds** — `buf.lock` for plugins
+- **Lint enforcement** — STANDARD lint rules
+- **Breaking detection** — FILE-level breaking checks
+- **CI validation** — GitHub Actions workflows
 
 ## 📦 Integration Guide
 
@@ -180,7 +182,7 @@ import pb "github.com/Shoaibashk/SerialLink-Proto/gen/go/seriallink/v1"
 
 Copy generated files from `gen/dart/` to your project:
 
-```
+```text
 your-flutter-app/
 └── lib/
     └── generated/
