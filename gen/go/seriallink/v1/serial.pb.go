@@ -2540,8 +2540,7 @@ const file_seriallink_v1_serial_proto_rawDesc = "" +
 	"\rConfigurePort\x12#.seriallink.v1.ConfigurePortRequest\x1a$.seriallink.v1.ConfigurePortResponse\x12Z\n" +
 	"\rGetPortConfig\x12#.seriallink.v1.GetPortConfigRequest\x1a$.seriallink.v1.GetPortConfigResponse\x12?\n" +
 	"\x04Ping\x12\x1a.seriallink.v1.PingRequest\x1a\x1b.seriallink.v1.PingResponse\x12W\n" +
-	"\fGetAgentInfo\x12\".seriallink.v1.GetAgentInfoRequest\x1a#.seriallink.v1.GetAgentInfoResponseB\xbf\x01\n" +
-	"\x11com.seriallink.v1B\vSerialProtoP\x01ZHgithub.com/Shoaibashk/SerialLink-Proto/gen/go/seriallink/v1;seriallinkv1\xa2\x02\x03SXX\xaa\x02\rSeriallink.V1\xca\x02\rSeriallink\\V1\xe2\x02\x19Seriallink\\V1\\GPBMetadata\xea\x02\x0eSeriallink::V1b\x06proto3"
+	"\fGetAgentInfo\x12\".seriallink.v1.GetAgentInfoRequest\x1a#.seriallink.v1.GetAgentInfoResponseB^ZHgithub.com/Shoaibashk/SerialLink-Proto/gen/go/seriallink/v1;seriallinkv1\xaa\x02\x11SerialLink.Api.V1b\x06proto3"
 
 var (
 	file_seriallink_v1_serial_proto_rawDescOnce sync.Once
