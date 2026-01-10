@@ -3,7 +3,7 @@ syntax = "proto3";
 package seriallink.v1;
 
 option csharp_namespace = "SerialLink.Api.V1";
-option go_package = "github.com/Shoaibashk/SerialLink-Proto/gen/go/seriallink/v1;seriallinkv1";
+option go_package = "github.com/Shoaibashk/SerialLink/gen/go/seriallink/v1;seriallinkv1";
 
 // SerialService provides serial port management and communication operations
 service SerialService {
