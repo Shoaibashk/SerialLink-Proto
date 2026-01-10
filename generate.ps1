@@ -94,47 +94,6 @@ function Invoke-BufGenerate {
     return @{ Success = $false; Output = "Rate limit exceeded after $MaxRetries retries" }
 }
 
-function Initialize-GoModule {
-    Write-Step "Initializing Go module in gen/go"
-    Push-Location
-    try {
-        Set-Location (Join-Path $PSScriptRoot "gen" "go")
-        
-        # Remove existing go.mod/go.sum if they exist
-        if (Test-Path "go.mod") {
-            Remove-Item "go.mod" -Force
-            Write-Info "Removed existing go.mod"
-        }
-        if (Test-Path "go.sum") {
-            Remove-Item "go.sum" -Force
-            Write-Info "Removed existing go.sum"
-        }
-        
-        # Initialize go module
-        $output = go mod init github.com/Shoaibashk/SerialLink/api/proto/gen/go 2>&1
-        if ($LASTEXITCODE -eq 0) {
-            Write-Success "Go module initialized"
-            
-            # Tidy up dependencies
-            $output = go mod tidy 2>&1
-            if ($LASTEXITCODE -eq 0) {
-                Write-Success "Go dependencies tidied"
-                return $true
-            }
-            else {
-                Write-Failure "Failed to tidy Go dependencies: $output"
-                return $false
-            }
-        }
-        else {
-            Write-Failure "Failed to initialize Go module: $output"
-            return $false
-        }
-    }
-    finally {
-        Pop-Location
-    }
-}
 #endregion
 
 #region Main Script
@@ -212,9 +171,6 @@ try {
             $generateSuccess = $true
             Write-Success "Generated Go code -> gen/go/"
             Write-Success "Generated Dart code -> gen/dart/"
-            
-            # Initialize Go module
-            Initialize-GoModule | Out-Null
         } else {
             throw $result.Output
         }
@@ -238,9 +194,6 @@ plugins:
             if ($result.Success) {
                 $generateSuccess = $true
                 Write-Success "Generated Go code -> gen/go/"
-                
-                # Initialize Go module
-                Initialize-GoModule | Out-Null
             } else {
                 throw $result.Output
             }
