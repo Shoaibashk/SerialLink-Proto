@@ -521,7 +521,7 @@ import (
     "google.golang.org/grpc"
     "google.golang.org/grpc/credentials/insecure"
     
-    pb "github.com/Shoaibashk/SerialLink-Proto/gen/go/seriallink/v1"
+    pb "github.com/Shoaibashk/SerialLink/api/proto/gen/go/seriallink/v1"
 )
 
 func main() {

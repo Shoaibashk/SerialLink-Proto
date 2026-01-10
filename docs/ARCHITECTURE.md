@@ -175,7 +175,7 @@ plugins:
 ### Go Projects
 
 ```go
-import pb "github.com/Shoaibashk/SerialLink-Proto/gen/go/seriallink/v1"
+import pb "github.com/Shoaibashk/SerialLink/api/proto/gen/go/seriallink/v1"
 ```
 
 ### Flutter Projects

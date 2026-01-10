@@ -111,7 +111,7 @@ function Initialize-GoModule {
         }
         
         # Initialize go module
-        $output = go mod init github.com/Shoaibashk/SerialLink-Proto/gen/go 2>&1
+        $output = go mod init github.com/Shoaibashk/SerialLink/api/proto/gen/go 2>&1
         if ($LASTEXITCODE -eq 0) {
             Write-Success "Go module initialized"
             
